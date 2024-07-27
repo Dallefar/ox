@@ -13,10 +13,7 @@ end
 lib.versionCheck('overextended/ox_doorlock')
 lib.locale()
 
-local Tunnel = module("vrp", "lib/Tunnel")
 local Proxy = module("vrp", "lib/Proxy")
-
-vRPclient = Tunnel.getInterface("vRP", "ox_doorlock") 
 vRP = Proxy.getInterface("vRP")
 
 local doors = {}
@@ -173,40 +170,9 @@ local isLoaded = false
 local table = lib.table
 local ox_inventory = exports.ox_inventory
 
---[[SetTimeout(1000, function()
-	if not GetPlayer then
-		-- because some people want to use this on their vmenu servers or some shit lmao
-		-- only supports passcodes
-		warn('no compatible framework was loaded, most features will not work')
-		function GetPlayer(_) end
-	end
-end)
-
-function RemoveItem(playerId, item, slot)
-	local player = GetPlayer(playerId)
-
-	if player then ox_inventory:RemoveItem(playerId, item, 1, nil, slot) end
-end
-
-function DoesPlayerHaveItem(player, items)
-	local playerId = player.source or player.PlayerData.source
-
-	for i = 1, #items do
-		local item = items[i]
-		local data = ox_inventory:Search(playerId, 1, item.name, item.metadata)[1]
-
-		if data and data.count > 0 then
-			if item.remove then
-				ox_inventory:RemoveItem(playerId, item.name, 1, nil, data.slot)
-			end
-
-			return item.name
-		end
-	end
-end]]
 
 local lockpickItems = {
-	{ name = 'lockpick' }
+	{ name = 'lockpick', remove = true, }
 }
 
 local function isAuthorised(source, door, lockpick)
@@ -219,7 +185,7 @@ local function isAuthorised(source, door, lockpick)
 		end
 
 		if door.characters then
-			return table.contains(door.characters, GetCharacterId(source))
+			return table.contains(door.characters, vRP.getUserId({source}))
 		end
 
 		if door.groups then

@@ -18,7 +18,6 @@ shared_scripts {
 }
 
 client_scripts {
-	'lib/*.lua',
 	'client/main.lua',
 	'client/utils.lua',
 }
