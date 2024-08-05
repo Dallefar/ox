@@ -25,29 +25,3 @@ SetTimeout(0, function()
         return false
     end
 end)
-
-function IsPlayerInGroup(source, filter)
-    local user_id = vRP.getUserId({source})
-    local type = type(filter)
-    if type == 'string' then
-        if vRP.hasGroup({user_id, filter}) then
-            return vRP.hasGroup({user_id, filter}), 0
-        end
-    else
-        local tabletype = table.type(filter)
-
-        if tabletype == 'hash' then
-            for groupName, _ in pairs(filter) do
-                if vRP.hasGroup({user_id, groupName}) then
-                    return vRP.hasGroup({user_id, groupName}), 0
-                end
-            end
-        elseif tabletype == 'array' then
-            for i = 1, #filter do
-                if vRP.hasGroup({user_id, filter[i]}) then
-                    return vRP.hasGroup({user_id, filter[i]}), 0
-                end
-            end
-        end
-    end
-end
